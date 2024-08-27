@@ -1,15 +1,18 @@
 from utils import database
+from fastapi import FastAPI
+from models import cimcnd_model
 
-conn = database.Connections().connection_CIMCND()
+app = FastAPI()
 
-# Usar la conexión
-SQL_QUERY = """
-SELECT * FROM Transactions
-"""
-cursor = conn.cursor()
-cursor.execute(SQL_QUERY)
+def get__all_origin():
+    data = []
+    for r in cimcnd_model.Cimcnd().get_all_records():
+        data.append(r)
 
-for r in cursor.fetchall():
-    print(r)
+    return data
 
+@app.get('/get/origin')
+async def root():
+    
+    return get__all_origin()
 
